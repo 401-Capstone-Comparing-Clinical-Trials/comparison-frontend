@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import { AiFillCaretDown, AiFillCaretUp } from "react-icons/ai"
-import {test_func} from './clinicalAPI.mjs';
 
 
 class Search extends React.Component{
@@ -25,7 +24,7 @@ class Search extends React.Component{
   }
 
   handleSubmit(event){
-    fetch("http://clinicaltrials.gov/api/query/full_studies?expr=heart+attack&min_rnk=1&max_rnk=1&fmt=json")
+    fetch("http://localhost:3000/api/query/full_studies?expr=heart+attack&min_rnk=1&max_rnk=1&fmt=json")
       .then(response => response.json())
       .then((result) => {alert(result)},
         (error) => {alert(error)})
@@ -35,14 +34,14 @@ class Search extends React.Component{
     const BarStyling = {width:"20rem",background:"#F2F1F9", border:"none", padding:"0.5rem", margin:"5px"};
     return(
       <form onSubmit={() => this.props.executeSearch(this.state.keyword, this.state.numResult)}>
-        <input 
+        <input
           id="keyword"
           style={BarStyling}
           value={this.state.keyword}
           onChange={this.handleChange}
           placeholder={"search clinical trials"}
         />
-        <input 
+        <input
           id="numResult"
           type="text"
           style={BarStyling}
@@ -50,7 +49,7 @@ class Search extends React.Component{
           onChange={this.handleChange}
           placeholder= {"number of results"}
         />
-        <input 
+        <input
           type="submit"
         />
       </form>
@@ -64,18 +63,18 @@ class Display extends React.Component{
   //Runs only on refresh
   constructor(props){
     super(props);
-    const numDisplays = 2; //Determines how many trials to display on screen. 
+    const numDisplays = 2; //Determines how many trials to display on screen.
     const wrappers = []; //array of trial display wrappers
     let i;
-      
-    for (i = 0; i < numDisplays; i++) { 
+
+    for (i = 0; i < numDisplays; i++) {
       wrappers.push(<TrialWrapper key={"key"+ i} numDisplays={numDisplays}
         displayInCriteria={false} //Initial values for criteria dropdown
         displayOutCriteria={false}
         displayOutMeasures={false}
         displayResults={false}
         toggleInCriteria={()=>this.toggleInCriteria()} //Sending dropdown toggle functions down to child components
-        toggleOutCriteria={() => this.toggleOutCriteria()} 
+        toggleOutCriteria={() => this.toggleOutCriteria()}
         toggleOutMeasures={() => this.toggleOutMeasures()}
         toggleResults={() => this.toggleResults()}
         trialChoice={i}
@@ -86,21 +85,19 @@ class Display extends React.Component{
         inclusionChoice={i}
         linkChoice={i}
         outcomeChoice={i}
-        resultChoice={i} 
+        resultChoice={i}
         trialData={null}
         />);
     }
     //Since we want to use these values elsewhere, add them to the state since state is persistent (each componenet instance has own state).
-    this.state = {numDisplays: numDisplays, displayInCriteria: false, displayOutCriteria: false, displayOutMeasures: false, displayResults: false, wrappers: wrappers, trial1: null, trial2: null}; 
+    this.state = {numDisplays: numDisplays, displayInCriteria: false, displayOutCriteria: false, displayOutMeasures: false, displayResults: false, wrappers: wrappers, trial1: null, trial2: null};
   }
 
   componentDidMount(){
-
-    fetch("https://clinicaltrials.gov/api/query/full_studies?expr=paloma+3%0D%0A&min_rnk=1&max_rnk=2&fmt=json")
+    fetch("http://localhost:3000/api/query/full_studies?expr=paloma+3%0D%0A&min_rnk=1&max_rnk=2&fmt=json")
       .then(response => response.json())
       .then((result) => {this.setState({trial1: result.FullStudiesResponse.FullStudies[0], trial2: result.FullStudiesResponse.FullStudies[1]}); this.updateCriteria()},
         (error) => {alert(error)});
-
   }
 
 
@@ -109,8 +106,8 @@ class Display extends React.Component{
   updateCriteria(){
     let i;
     const wrappers = [];
-    for (i = 0; i < this.state.numDisplays; i++) { 
-      wrappers.push(<TrialWrapper key={"key"+ i} numDisplays={this.state.numDisplays} 
+    for (i = 0; i < this.state.numDisplays; i++) {
+      wrappers.push(<TrialWrapper key={"key"+ i} numDisplays={this.state.numDisplays}
         displayInCriteria={this.state.displayInCriteria}
         displayOutCriteria={this.state.displayOutCriteria}
         displayOutMeasures={this.state.displayOutMeasures}
@@ -131,8 +128,9 @@ class Display extends React.Component{
         trialData={i===0 ? JSON.stringify(this.state.trial1) : JSON.stringify(this.state.trial2)}
         />);
     }
+
     //Calling setState triggers the render function to run and essentially updates the component
-    this.setState({wrappers: wrappers}) 
+    this.setState({wrappers: wrappers})
   }
 
   //Toggles the criteria dropdowns and the calls updateCriteria
@@ -183,8 +181,8 @@ class TrialWrapper extends React.Component {
       conditionChoice: this.props.conditionChoice,
       treatmentsChoice: this.props.treatmentsChoice,
       inclusionChoice: this.props.inclusionChoice,
-      outcomeChoice: this.props.outcomeChoice, 
-      resultChoice: this.props.resultChoice, 
+      outcomeChoice: this.props.outcomeChoice,
+      resultChoice: this.props.resultChoice,
       linkChoice: this.props.linkChoice,
       trialData: JSON.parse(this.props.trialData)
     };
@@ -193,7 +191,7 @@ class TrialWrapper extends React.Component {
   //Runs when a prop passed down from the parent changes. Used to trigger re-rendering on dropdown toggle
   componentDidUpdate(prevProps) {
     if(this.props.displayInCriteria !==prevProps.displayInCriteria){
-      this.setState({displayInCriteria: this.props.displayInCriteria});  
+      this.setState({displayInCriteria: this.props.displayInCriteria});
     }
     if(this.props.displayOutCriteria !== prevProps.displayOutCriteria){
       this.setState({displayOutCriteria: this.props.displayOutCriteria});
@@ -211,18 +209,31 @@ class TrialWrapper extends React.Component {
 
   //For criteria, we pass down the current state of dropdowns and the toggle function that we got from the parent
   render() {
+    {console.log(this.state.trialData)}
     return (
       <div className="TrialWrapper" style={{width: this.state.width}}>
-        <TrialName 
-          trialChoice={this.state.trialChoice} 
-          data={this.state.trialData? JSON.stringify(this.state.trialData.Study.ProtocolSection.IdentificationModule.BriefTitle) : null} />
-        <TrialDate dateChoice={this.state.dateChoice}/>
-        <TrialType typeChoice={this.state.typeChoice}/>
-        <TrialCondition conditionChoice={this.state.conditionChoice}/>
+        <TrialName
+          trialChoice={this.state.trialChoice}
+          data={this.state.trialData? JSON.stringify(this.state.trialData.Study.ProtocolSection.IdentificationModule.BriefTitle) : null}
+        />
+        <TrialDate
+          dateChoice={this.state.dateChoice}
+          startDate= {this.state.trialData ? this.state.trialData.Study.ProtocolSection.StatusModule.StartDateStruct.StartDate : null}
+          primaryCompDate = {this.state.trialData ? this.state.trialData.Study.ProtocolSection.StatusModule.PrimaryCompletionDateStruct.PrimaryCompletionDate : null}
+          estCompDate = {this.state.trialData ? this.state.trialData.Study.ProtocolSection.StatusModule.CompletionDateStruct.CompletionDate : null}
+        />
+        <TrialType
+          typeChoice={this.state.typeChoice}
+          data={this.state.trialData ? this.state.trialData.Study.ProtocolSection.DesignModule.StudyType : null}
+        />
+        <TrialCondition
+          conditionChoice={this.state.conditionChoice}
+          data={this.state.trialData ? this.state.trialData.Study.ProtocolSection.ConditionsModule.ConditionList.Condition : null}
+        />
         <TrialTreatment treatmentsChoice={this.state.treatmentsChoice}/>
         <TrialInCriteria inclusionChoice={this.state.inclusionChoice} displayInCriteria={this.state.displayInCriteria} toggleInCriteria={() => this.props.toggleInCriteria()}/>
         <TrialExCriteria displayOutCriteria={this.state.displayOutCriteria} toggleOutCriteria={() => this.props.toggleOutCriteria()}/>
-        <TrialOutcomeMeasures outcomeChoice={this.state.outcomeChoice} displayOutMeasures={this.state.displayOutMeasures} toggleOutMeasures={() => this.props.toggleOutMeasures()}/> 
+        <TrialOutcomeMeasures outcomeChoice={this.state.outcomeChoice} displayOutMeasures={this.state.displayOutMeasures} toggleOutMeasures={() => this.props.toggleOutMeasures()}/>
         <TrialResult resultChoice={this.state.resultChoice} displayResults={this.state.displayResults} toggleResults={() => this.props.toggleResults()}/>
         <TrialLink linkChoice={this.state.linkChoice}/>
       </div>
@@ -257,27 +268,32 @@ class TrialName extends React.Component {
 class TrialDate extends React.Component {
   constructor(props){
     super(props);
-    this.state = {date1: "September 26, 2013", date2: "December 5, 2014", date3: "May 3, 2021"}
-    if (this.props.dateChoice === 1) {
-      this.state = {date1: "December 17, 2013", date2: "January 29, 2016", date3: "August 31, 2022"}
+    this.state= {data: {start: this.props.startDate, primary: this.props.primaryCompDate, estComp: this.props.estCompDate}}
+  }
+
+  componentDidUpdate(prevProps){
+    if(this.props !== prevProps){
+      this.setState({data: {start: this.props.startDate, primary: this.props.primaryCompDate, estComp: this.props.estCompDate}});
     }
   }
+
   render(){
     return(
+
       <div className="TrialSection" >
         <p>Actual Study Start Date:
           <span className="text">
-            {this.state.date1}
+            {" " + this.state.data.start}
           </span>
         </p>
         <p>Actual Primary Completion Date:
           <span className="text">
-            {this.state.date2}
+            {" " + this.state.data.primary}
           </span>
         </p>
         <p>Estimated Study Completion Date:
           <span className="text">
-            {this.state.date3}
+            {" " + this.state.data.estComp}
           </span>
         </p>
       </div>
@@ -288,17 +304,21 @@ class TrialDate extends React.Component {
 class TrialType extends React.Component {
   constructor(props){
     super(props);
-    this.state = {type: "Interventional  (Clinical Trial)"}
-    if (this.props.typeChoice === 1) {
-      this.state = {type: "Interventional  (Clinical Trial)"}
+    this.state = {data: this.props.data}
+  }
+
+  componentDidUpdate(prevProps){
+    if(this.props.data !== prevProps.data){
+      this.setState({data: this.props.data});
     }
   }
+
   render(){
     return(
       <div className="TrialSection" >
-        <p>Type of Trial: 
+        <p>Type of Trial:
           <span className="text">
-            {this.state.type}
+            {" " + this.state.data}
           </span>
         </p>
       </div>
@@ -309,17 +329,22 @@ class TrialType extends React.Component {
 class TrialCondition extends React.Component {
   constructor(props){
     super(props);
-    this.state = {condition: "Metastatic Breast Cancer"}
-    if (this.props.conditionChoice === 1) {
-      this.state = {condition: "Advanced, Metastatic Breast Cancer"}
+    this.state = {data: this.props.data}
+
+  }
+
+  componentDidUpdate(prevProps){
+    if(this.props.data !== prevProps.data){
+      this.setState({data: this.props.data});
     }
   }
+
   render(){
     return(
       <div className="TrialSection" >
-        <p>Condition: 
+        <p>Condition:
           <span className="text">
-            {this.state.condition}
+            {" " + this.state.data}
           </span>
         </p>
       </div>
@@ -370,7 +395,7 @@ class TrialInCriteria extends React.Component {
     return(
       <div className="TrialSection" onClick={() => this.props.toggleInCriteria()} >
         <p>
-          Inclusion Criteria 
+          Inclusion Criteria
           {this.state.displayInCriteria ? <AiFillCaretUp /> : <AiFillCaretDown />}
         </p>
         {this.state.displayInCriteria ? <CriteriaBox type="Inclusion" inclusionChoice="0"/> : null}
@@ -379,7 +404,7 @@ class TrialInCriteria extends React.Component {
   }
 }
 
-//Same but for exlusion 
+//Same but for exlusion
 class TrialExCriteria extends React.Component {
   constructor(props){
     super(props);
@@ -396,7 +421,7 @@ class TrialExCriteria extends React.Component {
     return(
       <div className="TrialSection" onClick={() => this.props.toggleOutCriteria()} >
         <p>
-          Exclusion Criteria 
+          Exclusion Criteria
           {this.state.displayOutCriteria ? <AiFillCaretUp /> : <AiFillCaretDown />}
         </p>
         {this.state.displayOutCriteria ? <CriteriaBox type="Exclusion"/> : null}
@@ -466,7 +491,7 @@ class TrialLink extends React.Component {
   render(){
     return(
       <div className="TrialSection" >
-        <p>Link: 
+        <p>Link:
           <span className="text">
             <a href={this.state.link}>{this.state.link}</a>
           </span>
@@ -481,59 +506,59 @@ class SingleCriteria extends React.Component {
   constructor(props){
     super(props);
     const inclusionL = ["Women 18 years or older with metastatic or locally advanced disease, not amenable to curative therapy",
-                     "Confirmed diagnosis of HR+/HER2- breast cancer", 
-                     "Any menopausal status", 
+                     "Confirmed diagnosis of HR+/HER2- breast cancer",
+                     "Any menopausal status",
                      "Progressed within 12 months from prior adjuvant or progressed within 1 month from prior advanced/metastatic \
-                      endocrine breast cancer therapy", 
+                      endocrine breast cancer therapy",
                      "On an LHRH agonist for at least 28 days, if pre-/peri-menopausal, and willing to switch to goserelin \
-                      (Zoladex ®) at time of randomization.", 
-                     "Measurable disease defined by RECIST version 1.1, or bone-only disease", 
-                     "Eastern Cooperative Oncology Group (ECOG) PS 0-1", 
-                     "Adequate organ and marrow function, resolution of all toxic effects of prior therapy or surgical procedures", 
-                     "Patient must agree to provide tumor tissue from metastatic tissue at baseline", 
-                     "N/A", 
-                     "N/A", 
+                      (Zoladex ®) at time of randomization.",
+                     "Measurable disease defined by RECIST version 1.1, or bone-only disease",
+                     "Eastern Cooperative Oncology Group (ECOG) PS 0-1",
+                     "Adequate organ and marrow function, resolution of all toxic effects of prior therapy or surgical procedures",
+                     "Patient must agree to provide tumor tissue from metastatic tissue at baseline",
+                     "N/A",
+                     "N/A",
                      "N/A"];
     const inclusionR = ["Women with advanced (locoregionally recurrent or metastatic) breast cancer not amenable to curative therapy.",
-                     "Patient is postmenopausal. Postmenopausal status is defined either by:", 
-                     "No prior systemic anti-cancer therapy for advanced disease.", 
+                     "Patient is postmenopausal. Postmenopausal status is defined either by:",
+                     "No prior systemic anti-cancer therapy for advanced disease.",
                      "Patient has a histologically and/or cytologically confirmed diagnosis of estrogen-receptor positive and/or \
-                      progesterone receptor positive breast cancer by local laboratory.", 
+                      progesterone receptor positive breast cancer by local laboratory.",
                      "Patient has HER2-negative breast cancer defined as a negative in situ hybridization test or an IHC status of \
                       0, 1+ or 2+. If IHC is 2+, a negative in situ hybridization (FISH, CISH, or SISH) test is required by local \
-                      laboratory testing.", 
-                     "Patient must have either:", 
-                     "Patient has an Eastern Cooperative Oncology Group (ECOG) performance status 0 or 1", 
-                     "N/A", 
-                     "N/A", 
-                     "N/A", 
-                     "N/A", 
+                      laboratory testing.",
+                     "Patient must have either:",
+                     "Patient has an Eastern Cooperative Oncology Group (ECOG) performance status 0 or 1",
+                     "N/A",
+                     "N/A",
+                     "N/A",
+                     "N/A",
                      "N/A"];
 
     const exclusionL = ["Prior treatment with any CDK inhibitor, fulvestrant, everolimus, or agent that inhibits the PI3K-mTOR pathway",
-                     "Patients with extensive advanced/metastatic, symptomatic visceral disease, or known uncontrolled or symptomatic CNS metastases", 
-                     "Major surgery or any anti-cancer therapy within 2 weeks of randomization", 
-                     "Prior stem cell or bone marrow transplantation", 
-                     "Use of potent CYP3A4 inhibitors or inducers", 
-                     "N/A", 
-                     "N/A", 
-                     "N/A", 
-                     "N/A", 
-                     "N/A", 
-                     "N/A", 
+                     "Patients with extensive advanced/metastatic, symptomatic visceral disease, or known uncontrolled or symptomatic CNS metastases",
+                     "Major surgery or any anti-cancer therapy within 2 weeks of randomization",
+                     "Prior stem cell or bone marrow transplantation",
+                     "Use of potent CYP3A4 inhibitors or inducers",
+                     "N/A",
+                     "N/A",
+                     "N/A",
+                     "N/A",
+                     "N/A",
+                     "N/A",
                      "N/A"];
     const exclusionR = ["Patient who received any CDK4/6 inhibitor.",
-                     "Patient who received any prior systemic anti-cancer therapy (including hormonal therapy and chemotherapy) for advanced breast cancer", 
-                     "Patient is concurrently using other anti-cancer therapy.", 
+                     "Patient who received any prior systemic anti-cancer therapy (including hormonal therapy and chemotherapy) for advanced breast cancer",
+                     "Patient is concurrently using other anti-cancer therapy.",
                      "Patient has a concurrent malignancy or malignancy within 3 years of randomization, with the exception of \
-                      adequately treated, basal or squamous cell carcinoma, non-melanomatous skin cancer or curatively resected cervical cancer.", 
-                     "Patient has active cardiac disease or a history of cardiac dysfunction including any of the following", 
-                     "Patient is currently receiving any of the following medications and cannot be discontinued 7 days prior start if the treatment:", 
-                     "PN/A", 
-                     "N/A", 
-                     "N/A", 
-                     "N/A", 
-                     "N/A", 
+                      adequately treated, basal or squamous cell carcinoma, non-melanomatous skin cancer or curatively resected cervical cancer.",
+                     "Patient has active cardiac disease or a history of cardiac dysfunction including any of the following",
+                     "Patient is currently receiving any of the following medications and cannot be discontinued 7 days prior start if the treatment:",
+                     "PN/A",
+                     "N/A",
+                     "N/A",
+                     "N/A",
+                     "N/A",
                      "N/A"];
 
     this.state = {type: this.props.type};
@@ -705,7 +730,7 @@ class MeasuresBox extends React.Component {
             <ol>
               <li>Progression Free Survival (PFS) Per Investigator Assessment [ Time Frame: Up to approximately 20 months ]</li>
               <ul>
-                <li>PFS, defined as the time from the date of randomization to the date of the first documented progression 
+                <li>PFS, defined as the time from the date of randomization to the date of the first documented progression
                   or death due to any cause. PFS was assessed via a local radiology assessment according to RECIST 1.1</li>
               </ul>
             </ol>
@@ -840,15 +865,15 @@ class CriteriaBox extends React.Component {
     this.state = {type: this.props.type,
                   inclusionChoice: this.props.inclusionChoice,
                   exclusionChoice: this.props.exclusionChoice};
-    
+
   }
   render(){
     let i;
     const allCriteria = [];
     //Right now we are just arbitrarily generating 12 criteria for each section
-    //Easiest way to put in actual criteria for now would probably be to 
+    //Easiest way to put in actual criteria for now would probably be to
     //hardcode an array of criteria so you can pass the text as a prop using the index (like 'criteria' and 'type').
-    for (i = 0; i < 9; i++) { 
+    for (i = 0; i < 9; i++) {
       allCriteria.push(<SingleCriteria criteria={i} type={this.state.type} inclusionChoice={this.state.inclusionChoice} key={"criteria" + i}/>)
     }
     return(
@@ -866,4 +891,3 @@ ReactDOM.render(
   <Display />, //Triggers main component to display
   document.getElementById('root')
 );
-
