@@ -1,4 +1,4 @@
-* Instruction to run the code
+# Instruction to run the code
   1. Make sure you have the latest version of node.js installed
   2. Download prototype.zip (from Deliverable 2) If you already have it, skip this step
   3. Download index.js and index.css from github repo (https://github.com/401-Capstone-Comparing-Clinical-Trials/comparison-frontend)
