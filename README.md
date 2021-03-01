@@ -5,4 +5,4 @@
   4. Copy and paste *index.js* and *index.css* into prototype/src
   5. Run **cd prototype**
   6. Run **npm install** and then **npm start**
-  7. If you have any issues running the project, delete *package-lock.json* and *node_modules*. Then run npm install and then npm start again
+  7. If you have any issues running the project, delete *package-lock.json* and *node_modules*. Then run **npm install** and then **npm start** again
