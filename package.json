@@ -19,9 +19,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-
   "proxy": "https://clinicaltrials.gov",
-
   "eslintConfig": {
     "extends": [
       "react-app",
