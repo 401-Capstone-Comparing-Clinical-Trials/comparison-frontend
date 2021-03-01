@@ -19,10 +19,34 @@ body {
   justify-content: space-around;
 }
 
+.PatientAndTrials{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
 .TrialCollection{
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+}
+
+.TextInput{
+  margin: 5px;
+}
+
+.IndividualMeasure{
+  border-bottom: .5px solid grey;
+  font-weight: normal;
+}
+
+.Header1{
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.Header2{
+  font-size: 15px;
 }
 
 .TrialSection{
