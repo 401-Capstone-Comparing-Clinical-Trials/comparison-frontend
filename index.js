@@ -119,6 +119,7 @@ class Display extends React.Component{
         typeChoice={i}
         conditionChoice={i}
         treatmentsChoice={i}
+        treatmentsList={i}
         clusionChoice={i}
         outcomeChoice={i}
         resultChoice={i}
@@ -205,6 +206,14 @@ class TrialWrapper extends React.Component {
     }
   }
 
+  parseTreatments(data) {
+    var treatments = [];
+    for(var i = 0; i < data.length; i++) {
+      treatments.push(data[i].InterventionType + ": " + data[i].InterventionName);
+    }
+    return treatments;
+  }
+
   //For criteria, we pass down the current state of dropdowns and the toggle function that we got from the parent
   render() {
     {console.log(this.state.trialData)}
@@ -229,7 +238,10 @@ class TrialWrapper extends React.Component {
           conditionChoice={this.state.conditionChoice}
           data={this.state.trialData ? this.state.trialData.Study.ProtocolSection.ConditionsModule.ConditionList.Condition : null}
         />
-        <TrialTreatment treatmentsChoice={this.state.treatmentsChoice}/>
+        <TrialTreatment 
+          treatmentsChoice={this.state.treatmentsChoice}
+          treatmentsList={this.state.trialData ? this.parseTreatments(this.state.trialData.Study.ProtocolSection.ArmsInterventionsModule.InterventionList.Intervention) : null}
+        />
         <TrialInCriteria inclusionChoice={this.state.inclusionChoice} displayInCriteria={this.state.displayInCriteria} toggleInCriteria={() => this.props.toggleInCriteria()}/>
         <TrialExCriteria displayOutCriteria={this.state.displayOutCriteria} toggleOutCriteria={() => this.props.toggleOutCriteria()}/>
         <TrialOutcomeMeasures outcomeChoice={this.state.outcomeChoice} displayOutMeasures={this.state.displayOutMeasures} toggleOutMeasures={() => this.props.toggleOutMeasures()}/>
@@ -394,21 +406,35 @@ class TrialCondition extends React.Component {
 class TrialTreatment extends React.Component {
   constructor(props){
     super(props);
-    this.state = {treatment1: "Drug: Palbociclib", treatment2: "Drug: Fulvestrant", treatment3: "Drug: Placebo"}
-    if (this.props.treatmentsChoice === 1) {
-      this.state = {treatment1: "Drug: LEE011", treatment2: "Drug: Letrozole", treatment3: "Drug: LEE011 Placebo"}
+    this.state = {
+      treatmentsList: this.props.treatmentsList ? this.props.treatmentsList : []
+    };
+  }
+
+  componentDidUpdate(prevProps) {
+    if(this.props !== prevProps) {
+      this.setState( {
+        treatmentsList: this.props.treatmentsList ? this.props.treatmentsList : []
+      });
     }
   }
+
   render(){
     return(
       <div className="TrialSection" >
-        <p>Treatments:
+        <div>Treatments:
           <span className="text">
-            <li>{this.state.treatment1}</li>
-            <li>{this.state.treatment2}</li>
-            <li>{this.state.treatment3}</li>
+            <ul>
+              {
+                this.state.treatmentsList.map((listitem, i) => (
+                  <li key={i}>
+                    {listitem}
+                  </li>
+                ))
+              }
+            </ul>
           </span>
-        </p>
+        </div>
       </div>
     );
   }
