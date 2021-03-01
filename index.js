@@ -208,6 +208,7 @@ class TrialWrapper extends React.Component {
   //For criteria, we pass down the current state of dropdowns and the toggle function that we got from the parent
   render() {
     {console.log(this.state.trialData)}
+
     return (
       <div className="TrialWrapper" style={{width: this.state.width}}>
         <TrialName
@@ -232,8 +233,16 @@ class TrialWrapper extends React.Component {
         <TrialInCriteria inclusionChoice={this.state.inclusionChoice} displayInCriteria={this.state.displayInCriteria} toggleInCriteria={() => this.props.toggleInCriteria()}/>
         <TrialExCriteria displayOutCriteria={this.state.displayOutCriteria} toggleOutCriteria={() => this.props.toggleOutCriteria()}/>
         <TrialOutcomeMeasures outcomeChoice={this.state.outcomeChoice} displayOutMeasures={this.state.displayOutMeasures} toggleOutMeasures={() => this.props.toggleOutMeasures()}/>
-        <TrialResult resultChoice={this.state.resultChoice} displayResults={this.state.displayResults} toggleResults={() => this.props.toggleResults()}/>
-        <TrialLink linkChoice={this.state.linkChoice}/>
+        <TrialResult 
+          resultChoice={this.state.resultChoice}
+          displayResults={this.state.displayResults} 
+          leftFlowGroupTitle={this.state.trialData ? "this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowGroup[0].FlowGroupTitle" : null}
+          toggleResults={() => this.props.toggleResults()}
+        />
+        <TrialLink 
+          linkChoice={this.state.linkChoice}
+          link={this.state.trialData ? "https://clinicaltrials.gov/ct2/show/study/" + this.state.trialData.Study.ProtocolSection.IdentificationModule.NCTId : null}
+        />
       </div>
     );
   }
@@ -478,10 +487,17 @@ class TrialOutcomeMeasures extends React.Component {
 class TrialResult extends React.Component {
   constructor(props){
     super(props);
-    this.state = {displayResults: this.props.displayResults, resultChoice: this.props.resultChoice};
+    this.state = {displayResults: this.props.displayResults, 
+                  resultChoice: this.props.resultChoice,
+                  leftFlowGroupTitle: this.props.leftFlowGroupTitle
+                };
+    console.log("RESULT: " + this.props.leftFlowGroupTitle)
   }
 
   componentDidUpdate(prevProps){
+    if(this.props !== prevProps){
+      this.setState({leftFlowGroupTitle: "this.props.leftFlowGroupTitle"});
+    }
     if(prevProps.displayResults !== this.props.displayResults){
       this.setState({displayResults: this.props.displayResults});
     }
@@ -503,9 +519,12 @@ class TrialResult extends React.Component {
 class TrialLink extends React.Component {
   constructor(props){
     super(props);
-    this.state = {link: "https:\/\/clinicaltrials.gov\/ct2\/show\/study\/NCT01942135"}
-    if (this.props.linkChoice === 1) {
-      this.state = {link: "https:\/\/clinicaltrials.gov\/ct2\/show\/study\/NCT01958021"}
+    this.state= {link: this.props.link}
+  }
+
+  componentDidUpdate(prevProps){
+    if(this.props.link !== prevProps.link){
+      this.setState({link: this.props.link});
     }
   }
   render(){
