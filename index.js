@@ -236,8 +236,40 @@ class TrialWrapper extends React.Component {
         <TrialResult 
           resultChoice={this.state.resultChoice}
           displayResults={this.state.displayResults} 
-          leftFlowGroupTitle={this.state.trialData ? "this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowGroup[0].FlowGroupTitle" : null}
           toggleResults={() => this.props.toggleResults()}
+          leftFlowGroupTitle={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowGroupList.FlowGroup[0].FlowGroupTitle : "null") : null}
+          rightFlowGroupTitle={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowGroupList.FlowGroup[1].FlowGroupTitle : "null") : null}
+          leftStarted={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowMilestoneList.FlowMilestone[0].FlowAchievementList.FlowAchievement[0].FlowAchievementNumSubjects : "null") : null}
+          rightStarted={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowMilestoneList.FlowMilestone[0].FlowAchievementList.FlowAchievement[1].FlowAchievementNumSubjects : "null") : null}
+
+          leftCompleted={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowMilestoneList.FlowMilestone[1].FlowAchievementList.FlowAchievement[0].FlowAchievementNumSubjects : "null") : null}
+          rightCompleted={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowMilestoneList.FlowMilestone[1].FlowAchievementList.FlowAchievement[1].FlowAchievementNumSubjects : "null") : null}
+
+          leftNotCompleted={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowMilestoneList.FlowMilestone[2].FlowAchievementList.FlowAchievement[0].FlowAchievementNumSubjects : "null") : null}
+          rightNotCompleted={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowMilestoneList.FlowMilestone[2].FlowAchievementList.FlowAchievement[1].FlowAchievementNumSubjects : "null") : null}
+
+          leftAdverse={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[0].FlowReasonList.FlowReason[0].FlowReasonNumSubjects : "null") : null}
+          rightAdverse={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[0].FlowReasonList.FlowReason[1].FlowReasonNumSubjects : "null") : null}
+
+          leftStatus={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[1].FlowReasonList.FlowReason[0].FlowReasonNumSubjects : "null") : null}
+          rightStatus={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[1].FlowReasonList.FlowReason[1].FlowReasonNumSubjects : "null") : null}
+
+          leftRand={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[2].FlowReasonList.FlowReason[0].FlowReasonNumSubjects : "null") : null}
+          rightRand={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[2].FlowReasonList.FlowReason[1].FlowReasonNumSubjects : "null") : null}
+
+          leftDeath={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[3].FlowReasonList.FlowReason[0].FlowReasonNumSubjects : "null") : null}
+          rightDeath={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[3].FlowReasonList.FlowReason[1].FlowReasonNumSubjects : "null") : null}
+        
+          leftObject={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[4].FlowReasonList.FlowReason[0].FlowReasonNumSubjects : "null") : null}
+          rightObject={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[4].FlowReasonList.FlowReason[1].FlowReasonNumSubjects : "null") : null}
+          
+          leftRef={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[5].FlowReasonList.FlowReason[0].FlowReasonNumSubjects : "null") : null}
+          rightRef={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[5].FlowReasonList.FlowReason[1].FlowReasonNumSubjects : "null") : null}
+        
+          leftWith={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[6].FlowReasonList.FlowReason[0].FlowReasonNumSubjects : "null") : null}
+          rightWith={this.state.trialData ? (this.state.trialData.Study.ResultsSection ? this.state.trialData.Study.ResultsSection.ParticipantFlowModule.FlowPeriodList.FlowPeriod[0].FlowDropWithdrawList.FlowDropWithdraw[6].FlowReasonList.FlowReason[1].FlowReasonNumSubjects : "null") : null}
+        
+
         />
         <TrialLink 
           linkChoice={this.state.linkChoice}
@@ -489,14 +521,58 @@ class TrialResult extends React.Component {
     super(props);
     this.state = {displayResults: this.props.displayResults, 
                   resultChoice: this.props.resultChoice,
-                  leftFlowGroupTitle: this.props.leftFlowGroupTitle
+                  leftFlowGroupTitle: this.props.leftFlowGroupTitle,
+                  rightFlowGroupTitle: this.props.rightFlowGroupTitle,
+                  leftStarted: this.props.leftStarted,
+                  rightStarted: this.props.rightStarted,
+                  leftCompleted: this.props.leftCompleted,
+                  rightCompleted: this.props.rightCompleted,
+                  leftNotCompleted: this.props.leftNotCompleted,
+                  rightNotCompleted: this.props.rightNotCompleted,
+
+                  leftAdverse: this.props.leftAdverse,
+                  rightAdverse: this.props.rightAdverse,
+                  leftStatus: this.props.leftStatus,
+                  rightStatus: this.props.rightStatus,
+                  leftRand: this.props.leftRand,
+                  rightRand: this.props.rightRand,
+                  leftDeath: this.props.leftDeath,
+                  rightDeath: this.props.rightDeath,
+                  leftObject: this.props.leftObject,
+                  rightObject: this.props.rightObject,
+                  leftRef: this.props.leftRef,
+                  rightRef: this.props.rightRef,
+                  leftWith: this.props.leftWith,
+                  rightWith: this.props.rightWith,
                 };
-    console.log("RESULT: " + this.props.leftFlowGroupTitle)
   }
 
   componentDidUpdate(prevProps){
     if(this.props !== prevProps){
-      this.setState({leftFlowGroupTitle: "this.props.leftFlowGroupTitle"});
+      this.setState({leftFlowGroupTitle: this.props.leftFlowGroupTitle, 
+                     rightFlowGroupTitle: this.props.rightFlowGroupTitle,
+                     leftStarted: this.props.leftStarted,
+                     rightStarted: this.props.rightStarted,
+                     leftCompleted: this.props.leftCompleted,
+                     rightCompleted: this.props.rightCompleted,
+                     leftNotCompleted: this.props.leftNotCompleted,
+                     rightNotCompleted: this.props.rightNotCompleted,
+
+                     leftAdverse: this.props.leftAdverse,
+                     rightAdverse: this.props.rightAdverse,
+                     leftStatus: this.props.leftStatus,
+                     rightStatus: this.props.rightStatus,
+                     leftRand: this.props.leftRand,
+                     rightRand: this.props.rightRand,
+                     leftDeath: this.props.leftDeath,
+                     rightDeath: this.props.rightDeath,
+                     leftObject: this.props.leftObject,
+                     rightObject: this.props.rightObject,
+                     leftRef: this.props.leftRef,
+                     rightRef: this.props.rightRef,
+                     leftWith: this.props.leftWith,
+                     rightWith: this.props.rightWith,
+                   });
     }
     if(prevProps.displayResults !== this.props.displayResults){
       this.setState({displayResults: this.props.displayResults});
@@ -510,7 +586,31 @@ class TrialResult extends React.Component {
           Result
           {this.state.displayResults ? <AiFillCaretUp /> : <AiFillCaretDown />}
         </p>
-        {this.state.displayResults ? <ResultTable resultChoice={this.state.resultChoice} /> : null}
+        {this.state.displayResults ? <ResultTable resultChoice={this.state.resultChoice}
+                                                  leftFlowGroupTitle={this.state.leftFlowGroupTitle}
+                                                  rightFlowGroupTitle={this.state.rightFlowGroupTitle}
+                                                  leftStarted={this.state.leftStarted}
+                                                  rightStarted={this.state.rightStarted}
+                                                  leftCompleted={this.state.leftCompleted}
+                                                  rightCompleted={this.state.rightCompleted}
+                                                  leftNotCompleted={this.state.leftNotCompleted}
+                                                  rightNotCompleted={this.state.rightNotCompleted}
+
+                                                  leftAdverse={this.state.leftAdverse}
+                                                  rightAdverse={this.state.rightAdverse}
+                                                  leftStatus={this.state.leftStatus}
+                                                  rightStatus={this.state.rightStatus}
+                                                  leftRand={this.state.leftRand}
+                                                  rightRand={this.state.rightRand}
+                                                  leftDeath={this.state.leftDeath}
+                                                  rightDeath={this.state.rightDeath}
+                                                  leftObject={this.state.leftObject}
+                                                  rightObject={this.state.rightObject}
+                                                  leftRef={this.state.leftRef}
+                                                  rightRef={this.state.rightRef}
+                                                  leftWith={this.state.leftWith}
+                                                  rightWith={this.state.rightWith}
+                                                  /> : null}
       </div>
     );
   }
@@ -629,7 +729,31 @@ class SingleCriteria extends React.Component {
 class ResultTable extends React.Component {
   constructor(props){
     super(props);
-    this.state = { resultChoice: props.resultChoice }
+    this.state = { resultChoice: props.resultChoice,
+                   leftFlowGroupTitle: props.leftFlowGroupTitle,
+                   rightFlowGroupTitle: props.rightFlowGroupTitle,
+                   leftStarted: props.leftStarted,
+                   rightStarted: props.rightStarted,
+                   leftCompleted: props.leftCompleted,
+                   rightCompleted: props.rightCompleted,
+                   leftNotCompleted: props.leftNotCompleted,
+                   rightNotCompleted: props.rightNotCompleted,
+
+                   leftAdverse: props.leftAdverse,
+                   rightAdverse: props.rightAdverse,
+                   leftStatus: props.leftStatus,
+                   rightStatus: props.rightStatus,
+                   leftRand: props.leftRand,
+                   rightRand: props.rightRand,
+                   leftDeath: props.leftDeath,
+                   rightDeath: props.rightDeath,
+                   leftObject: props.leftObject,
+                   rightObject: props.rightObject,
+                   leftRef: props.leftRef,
+                   rightRef: props.rightRef,
+                   leftWith: props.leftWith,
+                   rightWith: props.rightWith,
+                 }
   }
   render(){
     if(this.state.resultChoice === 0){
@@ -637,54 +761,59 @@ class ResultTable extends React.Component {
         <table>
           <tbody>
             <tr>
-              <th>ArmGroup Title</th>
-              <th>Palbociclib + Fulvestrant</th>
-              <th>Placebo + Fulvestrant</th>
+              <th>Arm/Group Title</th>
+              <th>{this.state.leftFlowGroupTitle}</th>
+              <th>{this.state.rightFlowGroupTitle}</th>
             </tr>
             <tr>
               <td>Started</td>
-              <td>347</td>
-              <td>174</td>
+              <td>{this.state.leftStarted}</td>
+              <td>{this.state.rightStarted}</td>
             </tr>
             <tr>
               <td>Completed</td>
-              <td>0</td>
-              <td>0</td>
+              <td>{this.state.leftCompleted}</td>
+              <td>{this.state.rightCompleted}</td>
             </tr>
             <tr>
               <td>Not Completed</td>
-              <td>347</td>
-              <td>174</td>
+              <td>{this.state.leftNotCompleted}</td>
+              <td>{this.state.rightNotCompleted}</td>
             </tr>
             <tr>
-              <td>Global Deterioration of Health Status</td>
-              <td>8</td>
-              <td>3</td>
+              <td>Adverse Event</td>
+              <td>{this.state.leftAdverse}</td>
+              <td>{this.state.rightAdverse}</td>
+            </tr>
+            <tr>
+              <td>Global deterioration of health status</td>
+              <td>{this.state.leftStatus}</td>
+              <td>{this.state.rightStatus}</td>
+            </tr>
+            <tr>
+              <td>Randomized Not Treated</td>
+              <td>{this.state.leftRand}</td>
+              <td>{this.state.rightRand}</td>
             </tr>
             <tr>
               <td>Death</td>
-              <td>0</td>
-              <td>1</td>
+              <td>{this.state.leftDeath}</td>
+              <td>{this.state.rightDeath}</td>
             </tr>
             <tr>
-              <td>Objective Progression+Progressive Disease </td>
-              <td>85</td>
-              <td>87</td>
+              <td>ObjectiveProgression+Progressive Disease</td>
+              <td>{this.state.leftObject}</td>
+              <td>{this.state.rightObject}</td>
             </tr>
             <tr>
               <td>Participant Refused toContinue Treatment</td>
-              <td>1</td>
-              <td>1</td>
+              <td>{this.state.leftRef}</td>
+              <td>{this.state.rightRef}</td>
             </tr>
             <tr>
               <td>Withdrawal by Subject</td>
-              <td>4</td>
-              <td>2</td>
-            </tr>
-            <tr>
-              <td>Ongoing at date of cut-off (05 Dec 2014)</td>
-              <td>238</td>
-              <td>75</td>
+              <td>{this.state.leftWith}</td>
+              <td>{this.state.rightWith}</td>
             </tr>
           </tbody>
         </table>
@@ -696,58 +825,58 @@ class ResultTable extends React.Component {
           <tbody>
             <tr>
               <th>Arm/Group Title</th>
-              <th>LEE011 + Letrozole</th>
-              <th>Placebo + Letrozole</th>
+              <th>{this.state.leftFlowGroupTitle}</th>
+              <th>{this.state.rightFlowGroupTitle}</th>
             </tr>
             <tr>
               <td>Started</td>
-              <td>334</td>
-              <td>334</td>
-            </tr>
-            <tr>
-              <td>Patients Untreated</td>
-              <td>0</td>
-              <td>0</td>
+              <td>{this.state.leftStarted}</td>
+              <td>{this.state.rightStarted}</td>
             </tr>
             <tr>
               <td>Completed</td>
-              <td>334</td>
-              <td>330</td>
+              <td>{this.state.leftCompleted}</td>
+              <td>{this.state.rightCompleted}</td>
             </tr>
             <tr>
               <td>Not Completed</td>
-              <td>334</td>
-              <td>330</td>
-            </tr>
-            <tr>
-              <td>Progressive disease</td>
-              <td>334</td>
-              <td>330</td>
+              <td>{this.state.leftNotCompleted}</td>
+              <td>{this.state.rightNotCompleted}</td>
             </tr>
             <tr>
               <td>Adverse Event</td>
-              <td>25</td>
-              <td>7</td>
+              <td>{this.state.leftAdverse}</td>
+              <td>{this.state.rightAdverse}</td>
             </tr>
             <tr>
-              <td>Subject/guardian decision</td>
-              <td>12</td>
-              <td>13</td>
+              <td>Global deterioration of health status</td>
+              <td>{this.state.leftStatus}</td>
+              <td>{this.state.rightStatus}</td>
             </tr>
             <tr>
-              <td>Physician Decision</td>
-              <td>10</td>
-              <td>13</td>
-            </tr>
-            <tr>
-              <td>Protocol Violation</td>
-              <td>3</td>
-              <td>1</td>
+              <td>Randomized Not Treated</td>
+              <td>{this.state.leftRand}</td>
+              <td>{this.state.rightRand}</td>
             </tr>
             <tr>
               <td>Death</td>
-              <td>2</td>
-              <td>0</td>
+              <td>{this.state.leftDeath}</td>
+              <td>{this.state.rightDeath}</td>
+            </tr>
+            <tr>
+              <td>ObjectiveProgression+Progressive Disease</td>
+              <td>{this.state.leftObject}</td>
+              <td>{this.state.rightObject}</td>
+            </tr>
+            <tr>
+              <td>Participant Refused toContinue Treatment</td>
+              <td>{this.state.leftRef}</td>
+              <td>{this.state.rightRef}</td>
+            </tr>
+            <tr>
+              <td>Withdrawal by Subject</td>
+              <td>{this.state.leftWith}</td>
+              <td>{this.state.rightWith}</td>
             </tr>
           </tbody>
         </table>
