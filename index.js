@@ -247,9 +247,13 @@ class TrialWrapper extends React.Component {
           displayInCriteria={this.state.displayInCriteria} 
           toggleInCriteria={() => this.props.toggleInCriteria()}
 
-          inclusionStr = {this.state.trialData ? this.state.trialData.Study.ProtocolSection.EligibilityModule.EligibilityCriteria : null}
+          clusionStr = {this.state.trialData ? this.state.trialData.Study.ProtocolSection.EligibilityModule.EligibilityCriteria : null}
         />
-        <TrialExCriteria displayOutCriteria={this.state.displayOutCriteria} toggleOutCriteria={() => this.props.toggleOutCriteria()}/>
+        <TrialExCriteria 
+         displayOutCriteria={this.state.displayOutCriteria} 
+         toggleOutCriteria={() => this.props.toggleOutCriteria()}
+         clusionStr = {this.state.trialData ? this.state.trialData.Study.ProtocolSection.EligibilityModule.EligibilityCriteria : null}
+        />
         <TrialOutcomeMeasures outcomeChoice={this.state.outcomeChoice} displayOutMeasures={this.state.displayOutMeasures} toggleOutMeasures={() => this.props.toggleOutMeasures()}/>
         <TrialResult 
           resultChoice={this.state.resultChoice}
@@ -449,12 +453,15 @@ class TrialTreatment extends React.Component {
 class TrialInCriteria extends React.Component {
   constructor(props){
     super(props);
-    this.state = {displayInCriteria: this.props.displayInCriteria, clusionChoice: this.props.clusionChoice}
-    console.log("SS" + this.props.inclusionStr)
+    this.state = {displayInCriteria: this.props.displayInCriteria, clusionChoice: this.props.clusionChoice, clusionStr: this.props.clusionStr}
+    
   }
 
   //Triggers when prop from parent changes (dropdown toggle)
   componentDidUpdate(prevProps){
+    if(this.props !== prevProps){
+      this.setState({clusionStr: this.props.clusionStr});
+    }
     if(prevProps.displayInCriteria !== this.props.displayInCriteria){
       this.setState({displayInCriteria: this.props.displayInCriteria});
     }
@@ -470,7 +477,7 @@ class TrialInCriteria extends React.Component {
             Inclusion Criteria
             {this.state.displayInCriteria ? <AiFillCaretUp /> : <AiFillCaretDown />}
           </p>
-          {this.state.displayInCriteria ? <CriteriaBox type="Inclusion" clusionChoice="0"/> : null}
+          {this.state.displayInCriteria ? <CriteriaBox type="Inclusion" clusionChoice="0" clusionStr={this.state.clusionStr}/> : null}
         </div>
       );
     }
@@ -480,7 +487,7 @@ class TrialInCriteria extends React.Component {
           Inclusion Criteria
           {this.state.displayInCriteria ? <AiFillCaretUp /> : <AiFillCaretDown />}
         </p>
-        {this.state.displayInCriteria ? <CriteriaBox type="Inclusion" clusionChoice="1"/> : null}
+        {this.state.displayInCriteria ? <CriteriaBox type="Inclusion" clusionChoice="1" clusionStr={this.state.clusionStr}/> : null}
       </div>
     );
   }
@@ -490,10 +497,13 @@ class TrialInCriteria extends React.Component {
 class TrialExCriteria extends React.Component {
   constructor(props){
     super(props);
-    this.state = {displayOutCriteria: this.props.displayOutCriteria, clusionChoice: this.props.clusionChoice}
+    this.state = {displayOutCriteria: this.props.displayOutCriteria, clusionChoice: this.props.clusionChoice, clusionStr: this.props.clusionStr}
   }
 
   componentDidUpdate(prevProps){
+    if(this.props !== prevProps){
+      this.setState({clusionStr: this.props.clusionStr});
+    }
     if(prevProps.displayOutCriteria !== this.props.displayOutCriteria){
       this.setState({displayOutCriteria: this.props.displayOutCriteria});
     }
@@ -507,7 +517,7 @@ class TrialExCriteria extends React.Component {
             Exclusion Criteria
             {this.state.displayOutCriteria ? <AiFillCaretUp /> : <AiFillCaretDown />}
           </p>
-          {this.state.displayOutCriteria ? <CriteriaBox type="Exclusion" clusionChoice="0"/> : null}
+          {this.state.displayOutCriteria ? <CriteriaBox type="Exclusion" clusionChoice="0" clusionStr={this.state.clusionStr}/> : null}
         </div>
       );
     }
@@ -517,7 +527,7 @@ class TrialExCriteria extends React.Component {
           Exclusion Criteria
           {this.state.displayOutCriteria ? <AiFillCaretUp /> : <AiFillCaretDown />}
         </p>
-        {this.state.displayOutCriteria ? <CriteriaBox type="Exclusion" clusionChoice="1"/> : null}
+        {this.state.displayOutCriteria ? <CriteriaBox type="Exclusion" clusionChoice="1" clusionStr={this.state.clusionStr}/> : null}
       </div>
     );
   }
@@ -732,23 +742,27 @@ class SingleCriteria extends React.Component {
                      "N/A",
                      "N/A"];
 
-    this.state = {type: this.props.type, clusionChoice: this.props.clusionChoice};
+    this.state = {type: this.props.type, clusionChoice: this.props.clusionChoice, clusionStr: this.props.clusionStr};
+
+    let str = this.props.clusionStr.split("\n");
+    //console.log(str[this.props.criteria+2])
+    let inStr = inclusion(str)
+    let exStr = exclusion(str)
 
     if (this.state.type === "Inclusion"){
-      if (this.state.clusionChoice == 0) {
-        this.state = {criteria: inclusionL[this.props.criteria]}
-      }else{
-        this.state = {criteria: inclusionR[this.props.criteria]};
-      }
+      this.state = {criteria: inStr[this.props.criteria]};
     }
     else {
-      if (this.state.clusionChoice == 0) {
-        this.state = {criteria: exclusionL[this.props.criteria]}
-      }else{
-        this.state = {criteria: exclusionR[this.props.criteria]};
-      }
+      this.state = {criteria: exStr[this.props.criteria]};
     }
   }
+
+  componentDidUpdate(prevProps){
+    if(this.props.inclusionStr !== prevProps.inclusionStr){
+      this.setState({inclusionStr: this.props.inclusionStr});
+    }
+  }
+
   render(){
     return(
       <div className="Criteria" >
@@ -756,6 +770,36 @@ class SingleCriteria extends React.Component {
       </div>
     );
   }
+}
+
+function inclusion(str) {
+  let si = str.indexOf("Inclusion Criteria:") + 1
+  let ei = str.indexOf("Exclusion Criteria:")
+  let newStr = str.slice(si, ei);
+  let ans = []
+
+  for (let i = 0; i < newStr.length; i++){
+    if (newStr[i] != "") {
+      ans.push(newStr[i])
+    }
+  }
+
+  return ans
+}
+
+function exclusion(str) {
+  let si = str.indexOf("Exclusion Criteria:") + 1
+  let ei = str.length
+  let newStr = str.slice(si, ei);
+  let ans = []
+
+  for (let i = 0; i < newStr.length; i++){
+    if (newStr[i] != "") {
+      ans.push(newStr[i])
+    }
+  }
+  
+  return ans
 }
 
 class ResultTable extends React.Component {
@@ -1065,7 +1109,9 @@ class CriteriaBox extends React.Component {
     super(props);
     this.state = {type: this.props.type,
                   inclusionChoice: this.props.inclusionChoice,
-                  exclusionChoice: this.props.exclusionChoice};
+                  exclusionChoice: this.props.exclusionChoice,
+                  clusionStr: this.props.clusionStr,
+                };
 
   }
   render(){
@@ -1074,8 +1120,8 @@ class CriteriaBox extends React.Component {
     //Right now we are just arbitrarily generating 12 criteria for each section
     //Easiest way to put in actual criteria for now would probably be to
     //hardcode an array of criteria so you can pass the text as a prop using the index (like 'criteria' and 'type').
-    for (i = 0; i < 9; i++) {
-      allCriteria.push(<SingleCriteria criteria={i} type={this.state.type} inclusionChoice={this.state.inclusionChoice} key={"criteria" + i}/>)
+    for (i = 0; i < 20; i++) {
+      allCriteria.push(<SingleCriteria criteria={i} type={this.state.type} inclusionChoice={this.state.inclusionChoice} clusionStr={this.props.clusionStr} key={"criteria" + i}/>)
     }
     return(
       <div className="CriteriaBox" >
