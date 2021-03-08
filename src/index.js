@@ -60,7 +60,7 @@ class Search extends React.Component{
 }
 
 //This is the main (parent) class. This is the first component to be created.
-class Display extends React.Component{
+//class Display extends React.Component{
   //Runs only on refresh
   constructor(props){
     super(props);
