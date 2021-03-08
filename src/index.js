@@ -25,7 +25,7 @@ class Search extends React.Component{
   }
 
   handleSubmit(event){
-    fetch("/api/query/full_studies?expr=heart+attack&min_rnk=1&max_rnk=1&fmt=json")
+    fetch("/api/query/full_studies?expr=paloma+3%0D%0A&min_rnk=1&max_rnk=2&fmt=json")
       .then(response => response.json())
       .then((result) => {alert(result)},
         (error) => {alert(error)})
@@ -96,10 +96,10 @@ class Display extends React.Component{
 
   componentDidMount(){
 
-    fetch("/api/query/full_studies?expr=paloma+3%0D%0A&min_rnk=1&max_rnk=2&fmt=json")
+    /*fetch("/api/query/full_studies?expr=paloma+3%0D%0A&min_rnk=1&max_rnk=2&fmt=json")
       .then(response => response.json())
       .then((result) => {this.setState({trial1: result.FullStudiesResponse.FullStudies[0], trial2: result.FullStudiesResponse.FullStudies[1]}); this.updateCriteria()},
-        (error) => {alert(error)});
+        (error) => {alert(error)});*/
 
   }
 
