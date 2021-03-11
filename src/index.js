@@ -64,6 +64,7 @@ class Display extends React.Component{
     const wrappers = []; //array of trial display wrappers
     let i;
     this.executeSearch=this.executeSearch.bind(this);
+    this.sortResults = this.sortResults.bind(this);
       
     /*for (i = 0; i < numDisplays; i++) { 
       wrappers.push(<TrialWrapper key={"key"+ i} numDisplays={numDisplays}
@@ -116,6 +117,20 @@ class Display extends React.Component{
 
   }
 
+  //This function is called when the sorting criteria form is submitted. Inputs are the elements from the form.
+  sortResults(age, condtion, inclusion, exclusion, ongoing, completed, includeDrug, excludeDrug){
+    let currentResults = this.state.trials; //Retrieve the current list of trials
+
+    //Swap order of first two trials (just example)
+    let temp = currentResults[0];
+    currentResults[0] = currentResults[1];
+    currentResults[1] = temp;
+
+    this.setState({trials: currentResults}); //Update the state with our new list
+
+    this.updateCriteria(); //Re-render our elements
+  }
+
 
   //When we change the dropdown state in toggleInCriteria or toggleOutCriteria, we need to re-create the display wrappers
   //to reflect the change
@@ -162,7 +177,7 @@ class Display extends React.Component{
       <div className="Background">
         <Search executeSearch={this.executeSearch}/>
         <div className = 'PatientAndTrials'>
-          <PatientDisplay/>
+          <PatientDisplay sortResults={this.sortResults}/>
           <div className="TrialCollection">
             {this.state.wrappers}
           </div>
@@ -177,67 +192,123 @@ class Display extends React.Component{
 class PatientDisplay extends React.Component {
   constructor(props){
     super(props);
+
+    this.state = {
+      age: '',
+      condition: '',
+      inclusion: '',
+      exclusion: '',
+      ongoing: true,
+      completed: true,
+      includeDrug: '',
+      excludeDrug: '',
+    }
+
+    this.handleAgeChange = this.handleAgeChange.bind(this);
+    this.handleConditionChange = this.handleConditionChange.bind(this);
+    this.handleInclusionChange = this.handleInclusionChange.bind(this);
+    this.handleExclusionChange = this.handleExclusionChange.bind(this);
+    this.handleOngoingChange = this.handleOngoingChange.bind(this);
+    this.handleCompletedChange = this.handleCompletedChange.bind(this);
+    this.handleIncludeDrugChange = this.handleIncludeDrugChange.bind(this);
+    this.handleExcludeDrugChange = this.handleExcludeDrugChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.sortResults = this.props.sortResults.bind(this);
+
+  }
+
+  handleAgeChange(event){
+    this.setState({age: event.target.value});
+    console.log(this.state.age);
+  }
+  handleConditionChange(event){
+    this.setState({condition: event.target.value});
+  }
+  handleInclusionChange(event){
+    this.setState({inclusion: event.target.value});
+  }
+  handleExclusionChange(event){
+    this.setState({exclusion: event.target.value});
+  }
+  handleOngoingChange(event){
+    this.setState({ongoing: !this.state.ongoing});
+  }
+  handleCompletedChange(event){
+    this.setState({completed: !this.state.completed});
+  }
+  handleIncludeDrugChange(event){
+    this.setState({includeDrug: event.target.value});
+  }
+  handleExcludeDrugChange(event){
+    this.setState({excludeDrug: event.target.value});
+  }
+
+  handleSubmit(event){
+    event.preventDefault();
+    this.sortResults(this.state.age, this.state.condition, this.state.inclusion, this.state.exclusion,
+      this.state.ongoing, this.state.completed, this.state.includeDrug, this.state.excludeDrug);
   }
 
   render(){
     return(
       <div className='PatientDisplay' style={{width:'200px'}}>
         <p className="Header1">Sorting Criteria</p>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <p className="Header2">Patient Information</p>
           <input
           className="TextInput"
           placeholder="Age"
+          value={this.state.age}
+          onChange={this.handleAgeChange}
           />
           <input
           className="TextInput"
           placeholder="Condition"
+          value={this.state.condition}
+          onChange={this.handleConditionChange}
           />
           <input
           className="TextInput"
           placeholder="Inclusion Criteria"
+          value={this.state.inclusion}
+          onChange={this.handleInclusionChange}
           />
           <input
           className="TextInput"
           placeholder="Exlusion Criteria"
+          value={this.state.exclusion}
+          onChange={this.handleExclusionChange}
           />
           <p className="Header2">Trial Status</p>
           <input
           className="TextInput"
           type="checkbox"
           id="option1"
-          value="Primary Ongoing"
+          value="Study Ongoing"
+          onChange={this.handleOngoingChange}
           />
-          <label htmlFor="option1">Primary Ongoing</label>
-          <br/>
-          <input
-          className="TextInput"
-          type="checkbox"
-          id="option2"
-          value="Primary Completed"
-          />
-          <label htmlFor="option2">Primary Completed</label>
+          <label htmlFor="option1">Study Ongoing</label>
           <br/>
           <input
           className="TextInput"
           type="checkbox"
           id="option3"
           value="Study Completed"
+          onChange={this.handleCompletedChange}
           />
           <label htmlFor="option3">Study Completed</label>
           <p className="Header2">Drug Information</p>
           <input
           className="TextInput"
           placeholder="Include Drug"
+          value={this.state.includeDrug}
+          onChange={this.handleIncludeDrugChange}
           />
           <input
           className="TextInput"
           placeholder="Exclude Drug"
-          />
-          <p className="Header2">Outcome Measures</p>
-          <input
-          className="TextInput"
-          placeholder="Desired Outcome Measure"
+          value={this.state.excludeDrug}
+          onChange={this.handleExcludeDrugChange}
           />
           <br/>
           <br/>
