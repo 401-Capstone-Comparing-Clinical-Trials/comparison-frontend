@@ -118,16 +118,40 @@ class Display extends React.Component{
   }
 
   //This function is called when the sorting criteria form is submitted. Inputs are the elements from the form.
-  sortResults(age, condtion, inclusion, exclusion, ongoing, completed, includeDrug, excludeDrug){
+  sortResults(_age, condition, inc, exc, ongoing, completed, includeDrug, excludeDrug){
     let currentResults = this.state.trials; //Retrieve the current list of trials
+    let currentResultsJSON = JSON.stringify(currentResults)
 
-    //Swap order of first two trials (just example)
-    let temp = currentResults[0];
-    currentResults[0] = currentResults[1];
-    currentResults[1] = temp;
+    const content = {
+      data: currentResultsJSON,
+      age: _age,
+      order: "ascending"
+    };
 
-    this.setState({trials: currentResults}); //Update the state with our new list
-
+    const requestMetadata = {
+      method: 'GET',
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      body: content
+    };
+    
+    fetch("http://127.0.0.1:5000/api/sortTrialsByCriteria", requestMetadata)
+      .then(res => res.json())
+      .then(
+        (result) => {
+          this.setState({
+            trials: result.items
+          });
+        },
+        // Note: it's important to handle errors here
+        // instead of a catch() block so that we don't swallow
+        // exceptions from actual bugs in components.
+        (error) => {
+          alert(error)
+        }
+      )
+    
     this.updateCriteria(); //Re-render our elements
   }
 
@@ -194,14 +218,14 @@ class PatientDisplay extends React.Component {
     super(props);
 
     this.state = {
-      age: '',
-      condition: '',
-      inclusion: '',
-      exclusion: '',
-      ongoing: true,
-      completed: true,
-      includeDrug: '',
-      excludeDrug: '',
+      m_age: '',
+      m_condition: '',
+      m_inclusion: '',
+      m_exclusion: '',
+      m_ongoing: true,
+      m_completed: true,
+      m_includeDrug: '',
+      m_excludeDrug: '',
     }
 
     this.handleAgeChange = this.handleAgeChange.bind(this);
@@ -218,35 +242,35 @@ class PatientDisplay extends React.Component {
   }
 
   handleAgeChange(event){
-    this.setState({age: event.target.value});
+    this.setState({m_age: event.target.value});
     console.log(this.state.age);
   }
   handleConditionChange(event){
-    this.setState({condition: event.target.value});
+    this.setState({m_condition: event.target.value});
   }
   handleInclusionChange(event){
-    this.setState({inclusion: event.target.value});
+    this.setState({m_inclusion: event.target.value});
   }
   handleExclusionChange(event){
-    this.setState({exclusion: event.target.value});
+    this.setState({m_exclusion: event.target.value});
   }
   handleOngoingChange(event){
-    this.setState({ongoing: !this.state.ongoing});
+    this.setState({m_ongoing: !this.state.m_ongoing});
   }
   handleCompletedChange(event){
-    this.setState({completed: !this.state.completed});
+    this.setState({m_completed: !this.state.m_completed});
   }
   handleIncludeDrugChange(event){
-    this.setState({includeDrug: event.target.value});
+    this.setState({m_includeDrug: event.target.value});
   }
   handleExcludeDrugChange(event){
-    this.setState({excludeDrug: event.target.value});
+    this.setState({m_excludeDrug: event.target.value});
   }
 
   handleSubmit(event){
     event.preventDefault();
-    this.sortResults(this.state.age, this.state.condition, this.state.inclusion, this.state.exclusion,
-      this.state.ongoing, this.state.completed, this.state.includeDrug, this.state.excludeDrug);
+    this.sortResults(this.state.m_age, this.state.m_condition, this.state.m_inclusion, this.state.m_exclusion,
+      this.state.m_ongoing, this.state.m_completed, this.state.m_includeDrug, this.state.m_excludeDrug);
   }
 
   render(){
@@ -258,25 +282,25 @@ class PatientDisplay extends React.Component {
           <input
           className="TextInput"
           placeholder="Age"
-          value={this.state.age}
+          value={this.state.m_age}
           onChange={this.handleAgeChange}
           />
           <input
           className="TextInput"
           placeholder="Condition"
-          value={this.state.condition}
+          value={this.state.m_condition}
           onChange={this.handleConditionChange}
           />
           <input
           className="TextInput"
           placeholder="Inclusion Criteria"
-          value={this.state.inclusion}
+          value={this.state.m_inclusion}
           onChange={this.handleInclusionChange}
           />
           <input
           className="TextInput"
           placeholder="Exlusion Criteria"
-          value={this.state.exclusion}
+          value={this.state.m_exclusion}
           onChange={this.handleExclusionChange}
           />
           <p className="Header2">Trial Status</p>
@@ -301,13 +325,13 @@ class PatientDisplay extends React.Component {
           <input
           className="TextInput"
           placeholder="Include Drug"
-          value={this.state.includeDrug}
+          value={this.state.m_includeDrug}
           onChange={this.handleIncludeDrugChange}
           />
           <input
           className="TextInput"
           placeholder="Exclude Drug"
-          value={this.state.excludeDrug}
+          value={this.state.m_excludeDrug}
           onChange={this.handleExcludeDrugChange}
           />
           <br/>
